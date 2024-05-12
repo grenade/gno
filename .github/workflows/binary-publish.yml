@@ -2,20 +2,46 @@
 on:
   release:
     types:
-    - created
+      - created
 
 permissions:
-    contents: write
-    packages: write
+  contents: write
+  packages: write
 
 jobs:
   publish-linux-amd64:
-    name: publish binary for linux/amd64
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        goversion:
+          - "1.22"
+        goarch:
+          - amd64
+        goos:
+          - linux
+        program:
+          - gnokey
+          - gnoland
+          - gnoweb
+    name: publish binaries
     steps:
-    - uses: actions/checkout@v4
-    - uses: wangyoucao577/go-release-action@v1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        goos: linux
-        goarch: amd64
+      -
+        uses: actions/checkout@v4
+      -
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.goversion }}.x
+      -
+        uses: wangyoucao577/go-release-action@v1
+        working-directory: gno.land
+        with:
+          build_flags: ./cmd/${{ matrix.program }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          goversion: ${{ matrix.goversion }}
+          project_path: ./cmd/${{ matrix.program }}
+          binary_name: ${{ matrix.program }}
+          md5sum: true
+          sha256sum: true
