@@ -14,10 +14,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - darwin
-          - linux
-          - windows
         goversion:
           - "1.22"
         goarch:
@@ -25,7 +21,9 @@ jobs:
           - amd64
           - arm64
         goos:
+          - darwin
           - linux
+          - windows
         program:
           - gnokey
           - gnoland
