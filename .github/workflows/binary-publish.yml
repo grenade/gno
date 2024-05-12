@@ -9,22 +9,35 @@ permissions:
   packages: write
 
 jobs:
-  publish-linux-amd64:
-    runs-on: ubuntu-latest
+  publish-binaries:
+    name: publish binaries
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - darwin
+          - linux
+          - windows
         goversion:
           - "1.22"
         goarch:
+          - "386"
           - amd64
+          - arm64
         goos:
           - linux
         program:
           - gnokey
           - gnoland
           - gnoweb
-    name: publish binaries
+        exclude:
+          -
+            goarch: "386"
+            goos: darwin
+          -
+            goarch: arm64
+            goos: windows
+    runs-on: ubuntu-latest
     steps:
       -
         uses: actions/checkout@v4
