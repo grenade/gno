@@ -34,14 +34,12 @@ jobs:
           go-version: ${{ matrix.goversion }}.x
       -
         uses: wangyoucao577/go-release-action@v1
-        working-directory: gno.land
         with:
-          build_flags: ./cmd/${{ matrix.program }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
           goversion: ${{ matrix.goversion }}
-          project_path: ./cmd/${{ matrix.program }}
+          project_path: ./gno.land/cmd/${{ matrix.program }}
           binary_name: ${{ matrix.program }}
           md5sum: true
           sha256sum: true
